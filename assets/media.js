@@ -1777,5 +1777,43 @@ window.MEDIA = {
     "h": 1024
    }
   ]
- }
+ },
+ "videos": [
+  {
+   "id": "villa",
+   "src": "media/video/villa.mp4",
+   "prev": "media/video/villa-prev.mp4",
+   "poster": "media/video/villa.webp",
+   "w": 720,
+   "h": 1280,
+   "dur": 33
+  },
+  {
+   "id": "lego",
+   "src": "media/video/lego.mp4",
+   "prev": "media/video/lego-prev.mp4",
+   "poster": "media/video/lego.webp",
+   "w": 1280,
+   "h": 720,
+   "dur": 30
+  },
+  {
+   "id": "gravity",
+   "src": "media/video/gravity.mp4",
+   "prev": "media/video/gravity-prev.mp4",
+   "poster": "media/video/gravity.webp",
+   "w": 720,
+   "h": 1280,
+   "dur": 20
+  },
+  {
+   "id": "galileo",
+   "src": "media/video/galileo.mp4",
+   "prev": "media/video/galileo-prev.mp4",
+   "poster": "media/video/galileo.webp",
+   "w": 720,
+   "h": 1280,
+   "dur": 22
+  }
+ ]
 };

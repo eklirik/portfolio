@@ -24,6 +24,8 @@
 
   // ---------- все работы подряд (для окна и переходов) ----------
   const works = [];
+  const VIDS = Object.fromEntries((M.videos || []).map((v) => [v.id, v]));
+  (C.reels || []).forEach((r) => { if (VIDS[r.id]) works.push({ type: 'reel', id: r.id, r, v: VIDS[r.id] }); });
   M.models.forEach((m) => works.push({ type: '3d', id: m.id, m }));
   C.brands.forEach((b) => works.push({ type: 'brand', id: b.id, b, imgs: M.images[b.key] || [] }));
   C.games.forEach((g) => works.push({ type: 'game', id: g.id, g, imgs: M.images[g.key] || [] }));
@@ -31,6 +33,7 @@
   const prettyName = (s) => s.replace(/_/g, ' ');
 
   function shotsOf(w) {
+    if (w.type === 'reel') return [{ kind: 'video', src: w.v.src, poster: w.v.poster, thumb: w.v.poster, sound: true }];
     if (w.type === '3d') {
       const m = w.m;
       return [
@@ -47,6 +50,7 @@
 
   function workName(w) {
     if (w.type === '3d') return prettyName(w.m.name);
+    if (w.type === 'reel') return L(w.r.name);
     const o = w.b || w.g;
     return lang === 'ru' && o.nameRu ? o.nameRu : o.name;
   }
@@ -54,7 +58,7 @@
   // ---------- статичные тексты ----------
   function applyStatic() {
     document.documentElement.lang = lang;
-    document.title = lang === 'ru' ? 'EKLIRIK — 3D, брендинг, игры' : 'EKLIRIK — 3D, branding, games';
+    document.title = lang === 'ru' ? 'EKLIRIK — видео, 3D, брендинг, игры' : 'EKLIRIK — video, 3D, branding, games';
     $$('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
     $$('[data-i18n-html]').forEach((el) => { el.innerHTML = t(el.dataset.i18nHtml); });
     $$('[data-i18n-title]').forEach((el) => { el.title = t(el.dataset.i18nTitle); el.setAttribute('aria-label', el.title); });
@@ -66,6 +70,31 @@
     const items = M.models.map((m) =>
       `<button class="mq" type="button" data-work="${esc(m.id)}" tabindex="-1" aria-hidden="true"><img src="${m.card}" alt="" decoding="async" width="${m.cardW}" height="${m.cardH}"></button>`).join('');
     $('#marquee').innerHTML = items + items;
+  }
+
+  // ---------- видео для девелоперов ----------
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fmtDur = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+  function renderReels() {
+    const list = works.filter((w) => w.type === 'reel');
+    $('#heroReels').innerHTML = list.map((w) => `
+      <button class="hreel" type="button" data-work="${esc(w.id)}" aria-label="${esc(workName(w))}">
+        <video src="${w.v.prev}" poster="${w.v.poster}" muted loop playsinline ${reduceMotion ? '' : 'autoplay'} preload="metadata"></video>
+        <span class="hreel__name">${esc(workName(w))}</span>
+      </button>`).join('');
+    $('#reels').innerHTML = list.map((w, i) => `
+      <button class="reel reveal" type="button" data-work="${esc(w.id)}" style="transition-delay:${i * 60}ms">
+        <div class="reel__media">
+          <img src="${w.v.poster}" alt="${esc(workName(w))}" loading="lazy" decoding="async">
+          <video muted loop playsinline preload="none" data-src="${w.v.prev}"></video>
+          <span class="reel__play" aria-hidden="true">▶</span>
+          <span class="reel__dur">${fmtDur(w.v.dur)}</span>
+        </div>
+        <div class="reel__body">
+          <span class="reel__name">${esc(workName(w))}</span>
+          <span class="reel__type">${esc(L(w.r.type))}</span>
+        </div>
+      </button>`).join('');
   }
 
   // ---------- 3D ----------
@@ -100,7 +129,7 @@
 
   let cardObserver;
   function bindVideoCards() {
-    const cards = $$('.c3d');
+    const cards = $$('.c3d, .reel');
     if (canHover) {
       cards.forEach((c) => {
         c.addEventListener('pointerenter', () => playCard(c, true));
@@ -193,6 +222,7 @@
 
   function renderAll() {
     applyStatic();
+    renderReels();
     render3d();
     renderBrands();
     renderGames();
@@ -232,7 +262,13 @@
     const list = (items) => `<ul>${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`;
     const chips = (items) => `<div class="chips">${items.map((i) => `<span class="chip">${esc(i)}</span>`).join('')}</div>`;
     let h = '';
-    if (w.type === '3d') {
+    if (w.type === 'reel') {
+      const r = w.r;
+      h += `<p class="kicker">${esc(t('label_video'))}</p><h2 id="mTitle">${esc(workName(w))}</h2>`;
+      h += `<p class="info__sub">${esc(L(r.type))} · ${w.v.dur} ${esc(t('sec'))}</p>`;
+      h += `<p class="info__desc">${esc(L(r.desc))}</p>`;
+      h += `<h4>${esc(t('m_done'))}</h4>${chips(L(r.deliv))}`;
+    } else if (w.type === '3d') {
       const m = w.m;
       const d = m[lang] || m.ru;
       h += `<p class="kicker">${esc(t('label_3d'))}</p><h2 id="mTitle">${esc(prettyName(m.name))}</h2>`;
@@ -326,7 +362,11 @@
     tools.hidden = s.kind !== 'img';
     hint.textContent = s.kind === 'img' ? t(canHover ? 'm_hint' : 'm_hint_touch') : '';
     if (s.kind === 'video') {
-      inner.innerHTML = `<video src="${s.src}" poster="${s.poster}" autoplay muted loop playsinline controls></video>`;
+      inner.innerHTML = `<video src="${s.src}" poster="${s.poster}" ${s.sound ? '' : 'muted'} loop playsinline controls></video>`;
+      // ролик со звуком: если браузер не даёт играть со звуком, запускаем без звука
+      const v = $('video', inner);
+      const p = v.play();
+      if (p) p.catch(() => { v.muted = true; v.play().catch(() => {}); });
     } else if (s.kind === 'html') {
       inner.innerHTML = s.html;
     } else {
@@ -513,6 +553,18 @@
     if (u.searchParams.has('lang')) { u.searchParams.set('lang', lang); history.replaceState(history.state, '', u); }
     renderAll();
   }));
+
+  // ---------- статистика посещений (Яндекс Метрика) ----------
+  const metrika = C.analytics && C.analytics.metrika;
+  if (metrika) {
+    window.ym = window.ym || function () { (window.ym.a = window.ym.a || []).push(arguments); };
+    window.ym.l = Date.now();
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://mc.yandex.ru/metrika/tag.js';
+    document.head.appendChild(s);
+    window.ym(Number(metrika), 'init', { clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: true, trackHash: true });
+  }
 
   // ---------- старт ----------
   renderMarquee();
