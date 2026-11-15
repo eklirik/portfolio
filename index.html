@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>EKLIRIK — 3D, брендинг, игры</title>
-<meta name="description" content="Портфолио студии EKLIRIK: 3D-персонажи со скелетом и анимациями, фирменные стили и логотипы, игры для Roblox.">
+<title>EKLIRIK — видео, 3D, брендинг, игры</title>
+<meta name="description" content="Портфолио студии EKLIRIK: видео для застройщиков и отелей, 3D-персонажи, фирменные стили и логотипы, игры для Roblox, анимация и музыка.">
 <meta property="og:title" content="EKLIRIK — 3D, branding, games">
 <meta property="og:description" content="3D characters, brand identities and Roblox games.">
 <meta property="og:image" content="media/og.jpg">
@@ -22,9 +22,12 @@
     <span class="brand__mark">e</span><span class="brand__name">EKLIRIK</span>
   </a>
   <nav class="nav" aria-label="Main">
+    <a href="#video" data-i18n="nav_video"></a>
     <a href="#models" data-i18n="nav_3d"></a>
     <a href="#branding" data-i18n="nav_brand"></a>
     <a href="#games" data-i18n="nav_games"></a>
+    <a href="#animation" data-i18n="nav_anim"></a>
+    <a href="#music" data-i18n="nav_music"></a>
     <a href="#contact" data-i18n="nav_contact"></a>
   </nav>
   <div class="lang" role="group" aria-label="Language">
@@ -41,9 +44,13 @@
       <h1 class="hero__title" data-i18n-html="hero_title"></h1>
       <p class="hero__text" data-i18n="hero_text"></p>
       <div class="hero__cta">
-        <a class="btn btn--accent" href="#models" data-i18n="hero_cta1"></a>
+        <a class="btn btn--accent" href="#video" data-i18n="hero_cta1"></a>
         <a class="btn btn--ghost" href="#contact" data-i18n="hero_cta2"></a>
       </div>
+    </div>
+    <div class="wrap hero__reels">
+      <p class="hero__reels-cap" data-i18n="hero_reels"></p>
+      <div class="hreels" id="heroReels"></div>
     </div>
     <div class="marquee" aria-hidden="true"><div class="marquee__track" id="marquee"></div></div>
     <div class="wrap stats">
@@ -57,9 +64,23 @@
   <section class="services wrap" aria-labelledby="srv-t">
     <h2 class="services__title" id="srv-t" data-i18n="srv_t"></h2>
     <div class="services__grid">
-      <a class="srv" href="#models"><i>01</i><h3 data-i18n="srv1_t"></h3><p data-i18n="srv1_d"></p></a>
-      <a class="srv" href="#branding"><i>02</i><h3 data-i18n="srv2_t"></h3><p data-i18n="srv2_d"></p></a>
-      <a class="srv" href="#games"><i>03</i><h3 data-i18n="srv3_t"></h3><p data-i18n="srv3_d"></p></a>
+      <a class="srv" href="#video"><i>01</i><h3 data-i18n="srv4_t"></h3><p data-i18n="srv4_d"></p></a>
+      <a class="srv" href="#models"><i>02</i><h3 data-i18n="srv1_t"></h3><p data-i18n="srv1_d"></p></a>
+      <a class="srv" href="#branding"><i>03</i><h3 data-i18n="srv2_t"></h3><p data-i18n="srv2_d"></p></a>
+      <a class="srv" href="#games"><i>04</i><h3 data-i18n="srv3_t"></h3><p data-i18n="srv3_d"></p></a>
+      <a class="srv" href="#animation"><i>05</i><h3 data-i18n="srv5_t"></h3><p data-i18n="srv5_d"></p></a>
+      <a class="srv" href="#music"><i>06</i><h3 data-i18n="srv6_t"></h3><p data-i18n="srv6_d"></p></a>
+    </div>
+  </section>
+
+  <section class="section" id="video">
+    <div class="wrap">
+      <div class="head">
+        <p class="kicker" data-i18n="secvid_k"></p>
+        <h2 data-i18n="secvid_t"></h2>
+        <p class="head__text" data-i18n="secvid_d"></p>
+      </div>
+      <div class="reels" id="reels"></div>
     </div>
   </section>
 
@@ -96,6 +117,28 @@
     </div>
   </section>
 
+  <section class="section section--paper" id="animation">
+    <div class="wrap">
+      <div class="head">
+        <p class="kicker" data-i18n="secanim_k"></p>
+        <h2 data-i18n="secanim_t"></h2>
+        <p class="head__text" data-i18n="secanim_d"></p>
+      </div>
+      <p class="soonbox" data-i18n="soon_text"></p>
+    </div>
+  </section>
+
+  <section class="section" id="music">
+    <div class="wrap">
+      <div class="head">
+        <p class="kicker" data-i18n="secmusic_k"></p>
+        <h2 data-i18n="secmusic_t"></h2>
+        <p class="head__text" data-i18n="secmusic_d"></p>
+      </div>
+      <p class="soonbox" data-i18n="soon_text"></p>
+    </div>
+  </section>
+
   <section class="contact" id="contact">
     <div class="wrap contact__inner">
       <h2 data-i18n-html="contact_t"></h2>
@@ -110,6 +153,7 @@
 <footer class="foot wrap">
   <span>© 2026 EKLIRIK</span>
   <span data-i18n="footer"></span>
+  <a href="https://t.me/ekLirik19" target="_blank" rel="noopener">Telegram: @ekLirik19</a>
 </footer>
 
 <!-- Окно просмотра работы -->
