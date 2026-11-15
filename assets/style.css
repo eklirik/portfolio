@@ -309,6 +309,19 @@ h1, h2, h3 { font-family: var(--display); font-weight: 700; letter-spacing: -.02
 .reel__body { padding: 14px 4px 4px; }
 .reel__name { display: block; font: 600 17px/1.25 var(--display); }
 .reel__type { display: block; margin-top: 6px; font-size: 13px; color: var(--muted); }
+/* ---------- музыкальные каналы ---------- */
+.channels { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.chan { display: block; text-decoration: none; color: inherit; background: #fff; border-radius: var(--radius); overflow: hidden; transition: transform .3s, box-shadow .3s; }
+.chan:hover { transform: translateY(-4px); box-shadow: 0 30px 60px -36px rgba(0, 0, 0, .45); }
+.chan__img { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #222; }
+.chan__img img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s cubic-bezier(.2, .7, .2, 1); }
+.chan:hover .chan__img img { transform: scale(1.04); }
+.chan__yt { position: absolute; left: 50%; top: 50%; width: 68px; height: 48px; margin: -24px 0 0 -34px; display: grid; place-items: center; border-radius: 14px; background: #ff0033; color: #fff; font-size: 18px; }
+.chan__body { padding: 22px 24px 26px; }
+.chan__type { font-size: 13px; color: var(--muted); }
+.chan__body h3 { font-size: 26px; margin: 6px 0 10px; }
+.chan__body p { margin: 0 0 16px; color: var(--muted); font-size: 15px; }
+.chan__link { font-weight: 700; color: var(--accent); }
 .soonbox { margin: 0; padding: 44px 24px; border: 1px dashed rgba(0, 0, 0, .18); border-radius: var(--radius); color: var(--muted); text-align: center; }
 
 /* ---------- responsive ---------- */
@@ -321,7 +334,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 700; letter-spacing: -.02
   .nav { display: none; }
   .head { grid-template-columns: 1fr; }
   .head__text { justify-self: start; }
-  .brands { grid-template-columns: 1fr; }
+  .brands, .channels { grid-template-columns: 1fr; }
   .quark { aspect-ratio: 16 / 9; }
   .game, .game:nth-child(even) { grid-template-columns: 1fr; }
   .game:nth-child(even) .game__media { order: 0; }

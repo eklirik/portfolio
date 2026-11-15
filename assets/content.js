@@ -11,6 +11,26 @@ window.CONTENT = {
     metrika: '',
   },
 
+  // Музыкальные YouTube-каналы
+  music: [
+    {
+      id: 'kiflow', name: 'KiFlow', url: 'https://www.youtube.com/@KiFlowMusic', cover: 'media/music/kiflow.webp',
+      type: { ru: 'Песни на русском · клипы и lyric video', en: 'Russian-language songs · music & lyric videos' },
+      desc: {
+        ru: 'Авторские песни на русском: «Держусь», «Дождись», «Два чудака», «Что впереди». Делаем треки, клипы, lyric video и превью для YouTube.',
+        en: 'Original Russian-language songs: “Derzhus”, “Dozhdis”, “Dva chudaka”, “Chto vperedi”. We make the tracks, music videos, lyric videos and YouTube thumbnails.',
+      },
+    },
+    {
+      id: 'silkgravity', name: 'SilkGravity', url: 'https://www.youtube.com/@SilkGravityMusic', cover: 'media/music/silkgravity.webp',
+      type: { ru: 'Электронная музыка · видео с природой', en: 'Electronic music · nature visuals' },
+      desc: {
+        ru: 'Атмосферная электроника под красивые виды: Electric Mirage, Lucid, Beyond the Gate, Batumi Vibe. Музыка для отдыха, работы и путешествий.',
+        en: 'Atmospheric electronic music over beautiful scenery: Electric Mirage, Lucid, Beyond the Gate, Batumi Vibe. Music for relaxing, working and travelling.',
+      },
+    },
+  ],
+
   // Видео для девелоперов (файлы — в media.js, раздел videos)
   reels: [
     {
@@ -60,7 +80,7 @@ window.CONTENT = {
       nav_video: 'Видео', nav_3d: '3D', nav_brand: 'Брендинг', nav_games: 'Игры', nav_anim: 'Анимация', nav_music: 'Музыка', nav_contact: 'Контакты',
       hero_kicker: 'Студия цифрового контента',
       hero_title: 'Видео, 3D,<br><em>бренды</em> и&nbsp;игры',
-      hero_text: 'Снимаем без съёмок ролики для застройщиков и отелей, делаем 3D-персонажей, фирменные стили, игры для Roblox, мультфильмы и музыку. Каждую работу можно открыть и рассмотреть крупно.',
+      hero_text: 'Снимаем без съёмок ролики для застройщиков и отелей, делаем 3D-персонажей, фирменные стили, игры для Roblox и музыку. Каждую работу можно открыть и рассмотреть крупно.',
       hero_reels: 'Ролики для девелоперов — нажмите, чтобы посмотреть со звуком',
       srv4_t: 'Видео для недвижимости', srv4_d: 'Reels, Shorts и рекламные ролики для застройщиков, агентств недвижимости, отелей и курортов. Показываем объект, которого ещё нет.',
       srv5_t: 'Анимация и мультфильмы', srv5_d: 'Мультфильмы и анимационные ролики со своими персонажами: сценарий, анимация, озвучка, монтаж.',
@@ -69,8 +89,8 @@ window.CONTENT = {
       secvid_d: 'Контент-маркетинг для застройщиков, агентств недвижимости, отелей и курортов: рекламные ролики, Reels и Shorts, облёты и визуализация ещё не построенных объектов. Без съёмочной группы — с помощью ИИ-видео и монтажа.',
       secanim_k: '05 — Анимация', secanim_t: 'Анимация и мультфильмы',
       secanim_d: 'Мультфильмы и анимационные ролики со своими персонажами: от сценария и озвучки до монтажа.',
-      secmusic_k: '06 — Музыка', secmusic_t: 'Музыкальные YouTube-каналы',
-      secmusic_d: 'Ведём музыкальные YouTube-каналы: треки, видеоряд, обложки и оформление.',
+      secmusic_k: '05 — Музыка', secmusic_t: 'Музыкальные YouTube-каналы',
+      secmusic_d: 'Ведём свои музыкальные YouTube-каналы: пишем треки, монтируем клипы, делаем обложки и оформление. Нажмите на канал, чтобы послушать.', yt_open: 'Слушать на YouTube',
       soon_text: 'Работы скоро появятся здесь.',
       label_video: 'Видео для девелоперов', m_done: 'Что мы сделали', sec: 'с',
       hero_cta1: 'Смотреть работы', hero_cta2: 'Обсудить проект',
@@ -104,7 +124,7 @@ window.CONTENT = {
       nav_video: 'Video', nav_3d: '3D', nav_brand: 'Branding', nav_games: 'Games', nav_anim: 'Animation', nav_music: 'Music', nav_contact: 'Contact',
       hero_kicker: 'Digital content studio',
       hero_title: 'Video, 3D,<br><em>brands</em> &amp;&nbsp;games',
-      hero_text: 'We make videos for developers and hotels without a film crew, plus 3D characters, brand identities, Roblox games, cartoons and music. Open any project to see it up close.',
+      hero_text: 'We make videos for developers and hotels without a film crew, plus 3D characters, brand identities, Roblox games, and music. Open any project to see it up close.',
       hero_reels: 'Videos for property developers — tap to watch with sound',
       srv4_t: 'Real estate video', srv4_d: 'Reels, Shorts and promo videos for developers, real estate agencies, hotels and resorts. We show a building before it exists.',
       srv5_t: 'Animation & cartoons', srv5_d: 'Cartoons and animated videos with our own characters: script, animation, voice-over, editing.',
@@ -113,8 +133,8 @@ window.CONTENT = {
       secvid_d: 'Content marketing for developers, real estate agencies, hotels and resorts: promo videos, Reels and Shorts, fly-throughs and visualisations of buildings that are not built yet. No film crew needed — AI video plus editing.',
       secanim_k: '05 — Animation', secanim_t: 'Animation & cartoons',
       secanim_d: 'Cartoons and animated videos with our own characters, from script and voice-over to the final cut.',
-      secmusic_k: '06 — Music', secmusic_t: 'Music YouTube channels',
-      secmusic_d: 'We run music YouTube channels: tracks, visuals, thumbnails and channel design.',
+      secmusic_k: '05 — Music', secmusic_t: 'Music YouTube channels',
+      secmusic_d: 'We run our own music YouTube channels: we write the tracks, edit the videos and design thumbnails and channel art. Click a channel to listen.', yt_open: 'Listen on YouTube',
       soon_text: 'Projects are coming soon.',
       label_video: 'Video for developers', m_done: 'What we did', sec: 's',
       hero_cta1: 'See the work', hero_cta2: 'Start a project',

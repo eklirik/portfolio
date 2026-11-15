@@ -198,6 +198,20 @@
     }).join('');
   }
 
+  // ---------- музыкальные YouTube-каналы (ссылки наружу) ----------
+  function renderMusic() {
+    $('#channels').innerHTML = (C.music || []).map((c) => `
+      <a class="chan reveal" href="${esc(c.url)}" target="_blank" rel="noopener">
+        <div class="chan__img"><img src="${esc(c.cover)}" alt="${esc(c.name)}" loading="lazy" decoding="async"><span class="chan__yt" aria-hidden="true">▶</span></div>
+        <div class="chan__body">
+          <span class="chan__type">${esc(L(c.type))}</span>
+          <h3>${esc(c.name)}</h3>
+          <p>${esc(L(c.desc))}</p>
+          <span class="chan__link">${esc(t('yt_open'))} ↗</span>
+        </div>
+      </a>`).join('');
+  }
+
   // ---------- контакты ----------
   function renderContacts() {
     const c = C.contacts;
@@ -226,6 +240,7 @@
     render3d();
     renderBrands();
     renderGames();
+    renderMusic();
     renderContacts();
     watchReveal();
     if (modalState.wi >= 0 && !modal.hidden) openWork(modalState.wi, modalState.si, false);
