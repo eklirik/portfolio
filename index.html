@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=2026-11-18">
 </head>
 <body>
 
@@ -24,6 +24,7 @@
   <nav class="nav" aria-label="Main">
     <a href="#video" data-i18n="nav_video"></a>
     <a href="#models" data-i18n="nav_3d"></a>
+    <a href="#pro3d" data-i18n="nav_pro"></a>
     <a href="#branding" data-i18n="nav_brand"></a>
     <a href="#games" data-i18n="nav_games"></a>
     <a href="#music" data-i18n="nav_music"></a>
@@ -90,6 +91,61 @@
         <p class="head__text" data-i18n="sec3d_d"></p>
       </div>
       <div class="grid3d" id="grid3d"></div>
+    </div>
+  </section>
+
+  <!-- Профессиональные 3D-модели (отдельно от игровых персонажей). Первая: анатомия мышц — промо-петля,
+       демо-просмотрщик, ролики RU/EN, покупка -->
+  <section class="section section--dark" id="pro3d">
+    <div class="wrap">
+      <div class="head">
+        <p class="kicker" data-i18n="secpro_k"></p>
+        <h2 data-i18n-html="secpro_t"></h2>
+        <p class="head__text" data-i18n="secpro_d"></p>
+      </div>
+      <div class="anat" id="anatomy">
+      <div class="anat__head">
+        <span class="anat__num" data-i18n="anat_num"></span>
+        <h3 class="anat__title" data-i18n="secanat_t"></h3>
+        <p class="anat__lead" data-i18n="secanat_d"></p>
+      </div>
+      <div class="anat__promo reveal">
+        <video id="anatPromo" muted loop playsinline preload="none" disablepictureinpicture
+          poster="media/anatomy/promo.jpg" data-src="media/anatomy/promo.mp4" aria-hidden="true"></video>
+      </div>
+      <div class="anat__grid">
+        <div class="anat__feat reveal">
+          <h3 data-i18n="anat_feat_t"></h3>
+          <ul id="anatFeat"></ul>
+        </div>
+        <div class="anat__demo reveal">
+          <a class="anat__shot" id="anatShot" href="anatomy-demo/" target="_blank" rel="noopener">
+            <img id="anatShotImg" src="media/anatomy/demo_ru.jpg" alt="" loading="lazy" width="1200" height="675">
+            <span class="anat__badge" data-i18n="anat_badge"></span>
+            <span class="anat__open" data-i18n="anat_demo_btn"></span>
+          </a>
+          <h3 data-i18n="anat_demo_t"></h3>
+          <p data-i18n="anat_demo_d"></p>
+          <div class="anat__btns" id="anatBtns"></div>
+        </div>
+      </div>
+      <div class="anat__videos">
+        <figure class="anat__vid reveal" data-lang="ru">
+          <figcaption><b>RU</b><span data-i18n="anat_vid_ru"></span><i>1:17</i></figcaption>
+          <div class="anat__frame">
+            <video controls preload="none" playsinline disablepictureinpicture controlslist="nodownload noplaybackrate"
+              poster="media/anatomy/tour_ru.jpg" src="media/anatomy/tour_ru.mp4"></video>
+          </div>
+        </figure>
+        <figure class="anat__vid reveal" data-lang="en">
+          <figcaption><b>EN</b><span data-i18n="anat_vid_en"></span><i>1:17</i></figcaption>
+          <div class="anat__frame">
+            <video controls preload="none" playsinline disablepictureinpicture controlslist="nodownload noplaybackrate"
+              poster="media/anatomy/tour_en.jpg" src="media/anatomy/tour_en.mp4"></video>
+          </div>
+        </figure>
+      </div>
+      </div>
     </div>
   </section>
 
@@ -165,7 +221,7 @@
 </div>
 
 <script src="assets/media.js"></script>
-<script src="assets/content.js"></script>
-<script src="assets/app.js"></script>
+<script src="assets/content.js?v=2026-11-18"></script>
+<script src="assets/app.js?v=2026-11-18"></script>
 </body>
 </html>
