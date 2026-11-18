@@ -324,6 +324,56 @@ h1, h2, h3 { font-family: var(--display); font-weight: 700; letter-spacing: -.02
 .chan__link { font-weight: 700; color: var(--accent); }
 .soonbox { margin: 0; padding: 44px 24px; border: 1px dashed rgba(0, 0, 0, .18); border-radius: var(--radius); color: var(--muted); text-align: center; }
 
+/* ---------- 3D Pro: анатомия ---------- */
+/* «Профессиональные» — длинное слово: заголовок во всю ширину, текст под ним */
+#pro3d .head { grid-template-columns: 1fr; }
+#pro3d .head h2 { font-size: clamp(26px, 6.2vw, 72px); overflow-wrap: anywhere; }
+#pro3d .head__text { justify-self: start; max-width: 680px; margin-top: 12px; }
+.nw { white-space: nowrap; }
+.anat__head { margin-bottom: 28px; }
+.anat__num {
+  display: inline-block; padding: 5px 11px; border-radius: 99px; border: 1px solid rgba(255, 106, 43, .5); color: var(--accent-2);
+  font: 700 11px/1.3 var(--text); letter-spacing: .12em; text-transform: uppercase;
+}
+.anat__title { font-size: clamp(28px, 3.6vw, 48px); margin: 16px 0 14px; }
+.anat__lead { margin: 0; max-width: 760px; color: var(--on-dark-muted); font-size: 17px; }
+.anat__promo {
+  position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden;
+  background: #0e0f13; border: 1px solid var(--dark-line);
+}
+.anat__promo video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.anat__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 28px; margin-top: 28px; }
+.anat__feat, .anat__demo { padding: clamp(22px, 3vw, 36px); border-radius: var(--radius); background: var(--dark-2); border: 1px solid var(--dark-line); }
+.anat__grid h3 { font-size: clamp(22px, 2.4vw, 30px); margin: 0 0 18px; }
+.anat__feat ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; color: #d3cfc8; font-size: 15.5px; }
+.anat__feat li { display: flex; gap: 12px; }
+.anat__feat li::before { content: ''; flex: none; width: 7px; height: 7px; margin-top: 9px; border-radius: 50%; background: var(--accent); }
+.anat__shot { position: relative; display: block; margin-bottom: 22px; border-radius: 16px; overflow: hidden; aspect-ratio: 16 / 9; background: #0e0f13; }
+.anat__shot img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s cubic-bezier(.2, .7, .2, 1); }
+.anat__shot:hover img { transform: scale(1.03); }
+.anat__badge {
+  position: absolute; left: 14px; top: 14px; padding: 5px 11px; border-radius: 99px; background: var(--accent); color: #fff;
+  font: 700 11px/1.3 var(--text); letter-spacing: .1em; text-transform: uppercase;
+}
+.anat__open {
+  position: absolute; right: 14px; bottom: 14px; padding: 9px 15px; border-radius: 99px; background: rgba(15, 15, 17, .78);
+  color: #fff; font-weight: 700; font-size: 14px; backdrop-filter: blur(6px); transition: background .2s;
+}
+.anat__shot:hover .anat__open { background: var(--accent); }
+.anat__demo p { margin: 0; color: var(--on-dark-muted); }
+.anat__btns { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 24px; }
+.anat__soon { flex-basis: 100%; margin: 4px 0 0; font-size: 13px; color: var(--on-dark-muted); }
+.anat__videos { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 28px; }
+.anat__videos.en-first .anat__vid[data-lang="en"] { order: -1; }
+.anat__vid { margin: 0; }
+.anat__vid figcaption { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font: 600 17px/1.25 var(--display); }
+.anat__vid figcaption b {
+  padding: 4px 9px; border-radius: 8px; background: var(--accent); color: #fff; font: 700 12px/1.2 var(--text); letter-spacing: .08em;
+}
+.anat__vid figcaption i { margin-left: auto; font: 600 13px/1 var(--text); font-style: normal; color: var(--on-dark-muted); }
+.anat__frame { aspect-ratio: 16 / 9; border-radius: 16px; overflow: hidden; background: #000; border: 1px solid var(--dark-line); }
+.anat__frame video { width: 100%; height: 100%; object-fit: contain; background: #000; }
+
 /* ---------- responsive ---------- */
 @media (max-width: 1080px) {
   .modal__box { grid-template-columns: 1fr 340px; }
@@ -340,6 +390,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 700; letter-spacing: -.02
   .game:nth-child(even) .game__media { order: 0; }
   .contact__inner { grid-template-columns: 1fr; }
   .stats { grid-template-columns: repeat(2, 1fr); }
+  .anat__grid, .anat__videos { grid-template-columns: 1fr; gap: 20px; }
   .modal { padding: 0; }
   .modal__box { height: 100%; border-radius: 0; grid-template-columns: 1fr; grid-template-rows: 58vh 1fr; }
   .info { border-left: 0; border-top: 1px solid var(--dark-line); padding: 24px 18px; }

@@ -221,6 +221,46 @@
     $('#contactBtns').innerHTML = html;
   }
 
+  // ---------- 3D-анатомия ----------
+  function renderAnatomy() {
+    const A = C.anatomy || {};
+    $('#anatFeat').innerHTML = (t('anat_feats') || []).map((s) => `<li>${esc(s)}</li>`).join('');
+    const demo = (A.demo || 'anatomy-demo/') + '?lang=' + lang;
+    $('#anatShot').href = demo;
+    $('#anatShotImg').src = `media/anatomy/demo_${lang}.jpg`;
+    let html = `<a class="btn btn--accent" href="${esc(demo)}" target="_blank" rel="noopener">${esc(t('anat_demo_btn'))}</a>`;
+    if (A.gumroad) html += `<a class="btn btn--ghost" href="${esc(A.gumroad)}" target="_blank" rel="noopener">${esc(t('anat_buy_gumroad'))}</a>`;
+    if (A.artstation) html += `<a class="btn btn--ghost" href="${esc(A.artstation)}" target="_blank" rel="noopener">${esc(t('anat_buy_artstation'))}</a>`;
+    if (!A.gumroad && !A.artstation) {
+      html += `<a class="btn btn--ghost" href="#contact">${esc(t('anat_ask'))}</a><p class="anat__soon">${esc(t('anat_soon'))}</p>`;
+    }
+    $('#anatBtns').innerHTML = html;
+    // ролик на языке посетителя — первым
+    $('.anat__videos').classList.toggle('en-first', lang === 'en');
+  }
+
+  // промо-петля: без кнопок и звука, играет, пока окошко на экране
+  function bindAnatomy() {
+    const promo = $('#anatPromo');
+    const vids = $$('.anat__vid video');
+    // базовая защита роликов: без пункта «Сохранить видео» в меню
+    [promo, ...vids].forEach((v) => v && v.addEventListener('contextmenu', (e) => e.preventDefault()));
+    // одновременно играет только один ролик
+    vids.forEach((v) => v.addEventListener('play', () => vids.forEach((o) => { if (o !== v) o.pause(); })));
+    if (!promo) return;
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const start = () => {
+      if (still) return;
+      if (!promo.getAttribute('src')) promo.src = promo.dataset.src;
+      const p = promo.play();
+      if (p) p.catch(() => {});
+    };
+    if (!('IntersectionObserver' in window)) { start(); return; }
+    new IntersectionObserver((ents) => ents.forEach((e) => {
+      if (e.isIntersecting) start(); else promo.pause();
+    }), { threshold: 0.3 }).observe(promo);
+  }
+
   // ---------- появление при прокрутке ----------
   let revealObs;
   function watchReveal() {
@@ -241,6 +281,7 @@
     renderBrands();
     renderGames();
     renderMusic();
+    renderAnatomy();
     renderContacts();
     watchReveal();
     if (modalState.wi >= 0 && !modal.hidden) openWork(modalState.wi, modalState.si, false);
@@ -248,7 +289,7 @@
 
   // ---------- шапка ----------
   const top = $('#top');
-  const darkSections = [$('#hero'), $('#games')];
+  const darkSections = [$('#hero'), $('#pro3d'), $('#games')];
   const navLinks = $$('.nav a');
   function onScroll() {
     top.classList.toggle('scrolled', scrollY > 24);
@@ -260,6 +301,8 @@
     navLinks.forEach((a) => a.classList.toggle('active', a.getAttribute('href') === '#' + active));
   }
   addEventListener('scroll', onScroll, { passive: true });
+  // переход по ссылке с #раздел прокручивает страницу уже после старта: шапка подстраивается под тёмный раздел
+  addEventListener('load', onScroll);
 
   // ---------- окно просмотра ----------
   const modal = $('#modal');
@@ -584,6 +627,7 @@
   // ---------- старт ----------
   renderMarquee();
   renderAll();
+  bindAnatomy();
   onScroll();
   const m = location.hash.match(/^#w=(.+)$/);
   if (m) {

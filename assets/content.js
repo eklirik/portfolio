@@ -11,6 +11,13 @@ window.CONTENT = {
     metrika: '114337925',
   },
 
+  // 3D-анатомия: ссылки на магазины (пусто = кнопка не показывается, вместо неё «Скоро в продаже»)
+  anatomy: {
+    demo: 'anatomy-demo/',
+    gumroad: 'https://eklirix.gumroad.com/l/muscle-anatomy-3d',
+    artstation: '',
+  },
+
   // Музыкальные YouTube-каналы
   music: [
     {
@@ -78,6 +85,29 @@ window.CONTENT = {
   ui: {
     ru: {
       nav_video: 'Видео', nav_3d: '3D', nav_brand: 'Брендинг', nav_games: 'Игры', nav_anim: 'Анимация', nav_music: 'Музыка', nav_contact: 'Контакты',
+      nav_pro: '3D Pro',
+      secpro_k: 'Новинка — 3D Pro', secpro_t: 'Профессиональные <span class="nw">3D-модели</span>',
+      secpro_d: 'Не игровые персонажи, а точные модели для работы: обучение, медицина, фитнес, визуализация. К каждой — интерактивный просмотрщик и файлы для Blender, Unity и Unreal.',
+      anat_num: 'Модель 01',
+      secanat_t: 'Анатомия мышц человека в 3D',
+      secanat_d: 'Интерактивный атлас мышц и анимированная 3D-модель для учёбы, тренеров, массажистов, косметологов и 3D-художников. Работает в браузере и на Windows без интернета.',
+      anat_feat_t: 'Что внутри',
+      anat_feats: [
+        '384 мышцы и 274 кости с названиями на русском, английском и латыни',
+        'Карточка каждой мышцы: начало, прикрепление, функция, иннервация',
+        '31 упражнение: в каждом кадре видно, какие мышцы работают и насколько сильно',
+        'Ходьба и бег на беговой дорожке по нормам биомеханики',
+        '16 выражений лица по системе FACS с работающими мимическими мышцами',
+        'Слои мышц от поверхностных до глубоких и скелет отдельно',
+        '3D-модель для Blender, Unity и Unreal: .blend, FBX, GLB с ригом и анимациями',
+        'Таблицы мышц, костей и упражнений (CSV / JSON)',
+      ],
+      anat_badge: 'Демо', anat_demo_btn: 'Открыть демо ↗',
+      anat_demo_t: 'Попробуйте демо-версию',
+      anat_demo_d: 'Прямо в браузере: вся анатомия, карточки мышц и слои. Из упражнений и мимики — по три на выбор, остальное в полной версии.',
+      anat_buy_gumroad: 'Купить на Gumroad', anat_buy_artstation: 'ArtStation',
+      anat_soon: 'Скоро в продаже на Gumroad и ArtStation', anat_ask: 'Задать вопрос',
+      anat_vid_ru: 'Видеообзор на русском', anat_vid_en: 'Видеообзор на английском',
       hero_kicker: 'Студия цифрового контента',
       hero_title: 'Видео, 3D,<br><em>бренды</em> и&nbsp;игры',
       hero_text: 'Снимаем без съёмок ролики для застройщиков и отелей, делаем 3D-персонажей, фирменные стили, игры для Roblox и музыку. Каждую работу можно открыть и рассмотреть крупно.',
@@ -122,6 +152,29 @@ window.CONTENT = {
     },
     en: {
       nav_video: 'Video', nav_3d: '3D', nav_brand: 'Branding', nav_games: 'Games', nav_anim: 'Animation', nav_music: 'Music', nav_contact: 'Contact',
+      nav_pro: '3D Pro',
+      secpro_k: 'New — 3D Pro', secpro_t: 'Professional <span class="nw">3D models</span>',
+      secpro_d: 'Not game characters but precise models for real work: education, medicine, fitness and visualisation. Each comes with an interactive viewer and files for Blender, Unity and Unreal.',
+      anat_num: 'Model 01',
+      secanat_t: 'Human muscle anatomy in 3D',
+      secanat_d: 'An interactive muscle atlas and an animated 3D model for students, coaches, massage therapists, cosmetologists and 3D artists. Runs in the browser and on Windows, no internet needed.',
+      anat_feat_t: 'What’s inside',
+      anat_feats: [
+        '384 muscles and 274 bones named in English, Latin and Russian',
+        'A card for every muscle: origin, insertion, action, innervation',
+        '31 exercises: every frame shows which muscles work and how hard',
+        'Walking and running on a treadmill, built from gait biomechanics norms',
+        '16 facial expressions (FACS) with the working face muscles',
+        'Muscle layers from superficial to deep, plus the skeleton on its own',
+        '3D model for Blender, Unity and Unreal: .blend, FBX, GLB, rigged and animated',
+        'Muscle, bone and exercise tables (CSV / JSON)',
+      ],
+      anat_badge: 'Demo', anat_demo_btn: 'Open the demo ↗',
+      anat_demo_t: 'Try the demo',
+      anat_demo_d: 'Right in your browser: the whole anatomy, muscle cards and layers. Three exercises and three facial expressions; the rest is in the full version.',
+      anat_buy_gumroad: 'Buy on Gumroad', anat_buy_artstation: 'ArtStation',
+      anat_soon: 'Coming soon to Gumroad and ArtStation', anat_ask: 'Ask a question',
+      anat_vid_ru: 'Video tour in Russian', anat_vid_en: 'Video tour in English',
       hero_kicker: 'Digital content studio',
       hero_title: 'Video, 3D,<br><em>brands</em> &amp;&nbsp;games',
       hero_text: 'We make videos for developers and hotels without a film crew, plus 3D characters, brand identities, Roblox games, and music. Open any project to see it up close.',
