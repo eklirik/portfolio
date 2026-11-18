@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Анатомия мышц — 3D-просмотрщик (демо)</title>
+<meta name="robots" content="noindex">
+<style>
+  :root {
+    --bg: #0e0f13; --panel: rgba(20, 22, 28, 0.94); --line: #2a2e38; --line2: #3a404d; --text: #e8e8ea;
+    --muted: #9aa0ab; --accent: #ff8c14; --ok: #78c88c; --bad: #ff5a50; --blue: #1e55f0; --sel: #ffc04d;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
+    font: 14px/1.4 "Segoe UI", system-ui, -apple-system, sans-serif; overflow: hidden; }
+  #view { position: fixed; inset: 0; touch-action: none; }
+  .panel { position: fixed; background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    padding: 10px 12px 12px; backdrop-filter: blur(6px); z-index: 2; }
+  #left { top: 12px; left: 12px; width: 318px; max-height: calc(100% - 24px); overflow: auto; }
+  #right { top: 12px; right: 12px; width: 350px; max-height: calc(100% - 24px); overflow: auto; }
+  .panel.collapsed > :not(.head) { display: none !important; }
+  .head { display: flex; align-items: center; gap: 8px; }
+  .grow { flex: 1; }
+  h1 { font-size: 17px; margin: 0 0 6px; }
+  .head h1 { margin: 0; }
+  h2 { font-size: 12px; margin: 14px 0 6px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  button { font: inherit; color: var(--text); }
+  .min { width: 26px; height: 26px; border-radius: 6px; border: 1px solid var(--line); background: #1d2029;
+    cursor: pointer; padding: 0; line-height: 1; }
+  .lang { display: flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+  .lang button { border: 0; background: transparent; padding: 3px 8px; cursor: pointer; color: var(--muted); }
+  .lang button.on { background: #2a1f14; color: var(--accent); }
+  .tabs { display: flex; gap: 4px; margin: 10px 0 8px; }
+  .tabs button { flex: 1; padding: 6px 4px; border-radius: 7px; border: 1px solid var(--line); background: #171a21;
+    cursor: pointer; }
+  .tabs button.on { border-color: var(--accent); background: #2a1f14; }
+  .ex { display: block; width: 100%; text-align: left; margin: 3px 0; padding: 7px 9px; border-radius: 7px;
+    border: 1px solid var(--line); background: #171a21; cursor: pointer; }
+  .ex:hover { border-color: var(--line2); }
+  .ex.on { border-color: var(--accent); background: #2a1f14; }
+  .row { display: flex; gap: 8px; align-items: center; margin: 6px 0; flex-wrap: wrap; }
+  button.ctl { padding: 5px 10px; border-radius: 6px; border: 1px solid var(--line); background: #1d2029; cursor: pointer; }
+  button.ctl:hover { border-color: var(--line2); }
+  button.ctl.on { border-color: var(--accent); color: var(--accent); }
+  input[type=range] { flex: 1; min-width: 120px; }
+  label { cursor: pointer; user-select: none; }
+  .muted { color: var(--muted); }
+  .small { font-size: 12px; }
+  .ok { color: var(--ok); } .bad { color: var(--bad); }
+  .note { font-size: 12px; color: var(--muted); margin: 8px 0; }
+  .legend { height: 10px; border-radius: 5px; background: linear-gradient(90deg, #ffd63c, #ff8c14, #eb2814); }
+  .dot { width: 11px; height: 11px; border-radius: 50%; flex: none; transform: translateY(1px); display: inline-block; }
+  #working div { display: flex; gap: 8px; align-items: baseline; margin: 3px 0; }
+  /* search and tree */
+  .search { position: relative; }
+  #q { width: 100%; padding: 7px 9px; border-radius: 7px; border: 1px solid var(--line); background: #11131a;
+    color: var(--text); font: inherit; }
+  #q:focus { outline: none; border-color: var(--accent); }
+  #qres { margin-top: 4px; }
+  .qi, .mi { padding: 4px 6px; border-radius: 5px; cursor: pointer; }
+  .qi:hover, .mi:hover { background: #20242e; }
+  .qi i { display: block; font-size: 11px; color: var(--muted); }
+  .mi.sel, .qi.sel { background: #3a2a10; color: var(--sel); }
+  .mi.flash { animation: miflash 1.2s ease-out; }
+  @keyframes miflash { 0% { background: #8a5a14; } 100% { background: #3a2a10; } }
+  #tree { margin-top: 8px; }
+  .regh, .grph { display: flex; align-items: center; gap: 6px; padding: 5px 4px; border-radius: 6px; cursor: pointer; }
+  .regh { font-weight: 600; }
+  .regh:hover, .grph:hover { background: #1b1f27; }
+  .arr { width: 12px; flex: none; color: var(--muted); font-size: 10px; }
+  .arr::before { content: "\25B8"; }
+  .open > .regh .arr::before, .open > .grph .arr::before { content: "\25BE"; }
+  .regb, .mlist { display: none; }
+  .reg.open > .regb { display: block; padding-left: 10px; }
+  .grp.open > .mlist { display: block; padding-left: 18px; font-size: 13px; }
+  .gname { flex: 1; }
+  .gname:hover { color: var(--sel); }
+  .cnt { color: var(--muted); font-size: 11px; font-weight: normal; }
+  .grph input { margin: 0; }
+  /* right panel */
+  #selbox { border: 1px solid #4a3a1a; background: #1f1910; border-radius: 8px; padding: 8px 10px; margin-bottom: 10px; }
+  #selname { color: var(--sel); font-weight: 600; }
+  #selbox .row { margin: 6px 0 0; gap: 6px; }
+  #selbox button.ctl { padding: 4px 8px; font-size: 12px; }
+  #workbox { margin-bottom: 12px; }
+  dl { margin: 0; } dt { color: var(--muted); font-size: 12px; margin-top: 9px; } dd { margin: 2px 0 0; }
+  .tag { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 11px; margin-right: 4px;
+    background: #262a34; color: var(--muted); }
+  .tag.p { background: #3a2412; color: #ffb366; } .tag.h { background: #2d2a17; color: #e6d27a; }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 2px; }
+  .chip { padding: 1px 7px; border-radius: 10px; background: #232733; color: #c4c8d0; font-size: 11px; }
+  .exl, .pk { display: flex; align-items: center; gap: 8px; padding: 3px 4px; border-radius: 5px; cursor: pointer; }
+  .exl:hover, .pk:hover { background: #20242e; }
+  .bar { width: 64px; height: 7px; border-radius: 4px; background: #262a34; flex: none; overflow: hidden; }
+  .bar i { display: block; height: 100%; }
+  .pk .pct, .exl .pct { color: var(--muted); font-size: 11px; margin-left: auto; white-space: nowrap; padding-left: 6px; }
+  /* view toolbar */
+  #viewbar { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 4px; z-index: 1;
+    flex-wrap: wrap; justify-content: center; max-width: calc(100% - 700px); }
+  #viewbar button { padding: 5px 9px; border-radius: 6px; border: 1px solid var(--line); background: rgba(29, 32, 41, .92);
+    cursor: pointer; font-size: 12px; }
+  #viewbar button:hover { border-color: var(--line2); }
+  #bShowAll { border-color: #4a3a1a !important; color: var(--sel); }
+  #bLang { border-color: #4a3a1a !important; color: var(--accent); }
+  #motionbar { left: 50%; bottom: 36px; transform: translateX(-50%); display: flex; align-items: center; gap: 10px;
+    padding: 7px 10px; max-width: calc(100% - 700px); }
+  #motionbar[hidden] { display: none !important; }
+  #mbName { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #mbStop { border-color: #5a2a24; }
+  /* height bar: moves the view along the body (feet .. head) like a page scroll, at any zoom */
+  #hbar { position: fixed; right: 374px; top: 50%; transform: translateY(-50%); height: 56vh; width: 44px; z-index: 1;
+    display: flex; flex-direction: column; align-items: center; gap: 5px; user-select: none; touch-action: none; }
+  #htrack { position: relative; flex: 1; width: 10px; border-radius: 5px; background: rgba(42, 46, 56, .92);
+    border: 1px solid var(--line); cursor: pointer; }
+  #hthumb { position: absolute; left: 50%; width: 22px; height: 30px; border-radius: 7px; background: var(--accent);
+    transform: translate(-50%, -50%); cursor: grab; box-shadow: 0 1px 4px rgba(0, 0, 0, .5); }
+  #hthumb:active { cursor: grabbing; }
+  .hl { font-size: 10px; color: var(--muted); text-align: center; line-height: 1.1; }
+  #tip { position: fixed; pointer-events: none; background: rgba(12, 13, 17, 0.95); border: 1px solid var(--line);
+    border-radius: 8px; padding: 7px 10px; max-width: 320px; display: none; z-index: 5; }
+  #tip b { display: block; font-size: 14px; }
+  #tip i { color: var(--muted); font-size: 12px; }
+  #help { position: fixed; left: 50%; top: 56px; transform: translateX(-50%); z-index: 6; width: min(460px, calc(100% - 24px)); }
+  #help ul { margin: 6px 0 0; padding-left: 18px; }
+  #help li { margin: 3px 0; }
+  #foot { position: fixed; left: 342px; bottom: 10px; right: 374px; font-size: 11px; color: #6f7480; text-align: center; }
+  #loading { position: fixed; inset: 0; display: flex; flex-direction: column; gap: 10px; align-items: center;
+    justify-content: center; font-size: 16px; color: var(--muted); z-index: 10; background: var(--bg); padding: 24px;
+    text-align: center; }
+  #loading .bar { width: 240px; height: 6px; }
+  #loading .bar i { width: 0; background: var(--accent); }
+  @media (max-width: 900px) {
+    #left { width: auto; right: 12px; top: 8px; left: 8px; right: 8px; max-height: 44%; }
+    #right { top: auto; bottom: 8px; left: 8px; right: 8px; width: auto; max-height: 38%; }
+    #viewbar { top: 50%; bottom: auto; left: auto; right: 8px; transform: translateY(-50%); flex-direction: column;
+      max-width: none; }
+    #viewbar button { padding: 4px 6px; font-size: 11px; }
+    #foot { display: none; }
+    #hbar { right: auto; left: 6px; height: 34vh; }
+    #motionbar { bottom: calc(38% + 18px); max-width: calc(100% - 24px); }
+  }
+</style>
+<script type="importmap">
+{ "imports": {
+    "three": "./lib/three/build/three.module.min.js",
+    "three/addons/": "./lib/three/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="view"></div>
+<div id="loading"><div id="loadtxt">Загрузка модели…</div><div class="bar"><i id="loadbar"></i></div></div>
+<script>
+  // opened as a plain file: browsers block the model there, so say how to start it
+  if (location.protocol === 'file:') {
+    document.getElementById('loadtxt').innerHTML = 'Запустите просмотрщик файлом <b>open_viewer.bat</b> (Windows) или ' +
+      '<b>open_viewer.command</b> (Mac).<br>Start the viewer with <b>open_viewer.bat</b> (Windows) or ' +
+      '<b>open_viewer.command</b> (Mac): browsers do not load the model from a plain file.';
+  }
+</script>
+<div id="left" class="panel">
+  <div class="head">
+    <h1 class="grow" data-t="title">Мышцы человека</h1>
+    <div class="lang"><button data-lang="ru">RU</button><button data-lang="en">EN</button></div>
+    <button class="min" data-tt="min">–</button>
+  </div>
+  <div class="tabs">
+    <button data-tab="anat" data-t="tabAnat">Анатомия</button>
+    <button data-tab="ex" data-t="tabEx">Упражнения</button>
+    <button data-tab="layers" data-t="tabLayers">Слои</button>
+    <button data-tab="face" data-t="tabFace">Мимика</button>
+  </div>
+  <section id="tab-anat">
+    <div class="note" data-t="hint"></div>
+    <div class="search"><input id="q" type="search" autocomplete="off" data-tp="searchPh"><div id="qres"></div></div>
+    <div id="tree"></div>
+  </section>
+  <section id="tab-ex" hidden>
+    <div id="exlist"></div>
+    <div id="playbox" hidden>
+      <div class="row">
+        <button class="ctl" id="play">❚❚</button>
+        <input type="range" id="scrub" min="0" max="100" value="0">
+      </div>
+      <div class="row"><button class="ctl" id="exStop" data-t="exStop"></button></div>
+      <div class="row small"><span class="muted" data-t="speed"></span>
+        <label><input type="radio" name="spd" value="0.25"> 0,25×</label>
+        <label><input type="radio" name="spd" value="0.5"> 0,5×</label>
+        <label><input type="radio" name="spd" value="1" checked> 1×</label>
+      </div>
+      <div id="checks" class="note"></div>
+      <div class="row"><label><input type="checkbox" id="cbFade"> <span data-t="fade"></span></label></div>
+      <h2 data-t="colorH"></h2>
+      <div class="legend"></div>
+      <div class="row small muted" style="justify-content:space-between"><span data-t="weak"></span><span data-t="strong"></span></div>
+      <div class="row small"><span class="dot" style="background:#1e55f0"></span> <span data-t="stretched"></span></div>
+      <h2 data-t="peakH"></h2>
+      <div id="peak" class="small"></div>
+    </div>
+  </section>
+  <section id="tab-face" hidden>
+    <div class="note" data-t="faceNote"></div>
+    <div id="facelist"></div>
+    <div id="facebox" hidden>
+      <div class="row small"><span class="muted" data-t="faceAmount"></span>
+        <input type="range" id="faceAmt" min="0" max="100" value="100"></div>
+      <div class="row"><button class="ctl" id="faceReplay" data-t="faceReplay"></button></div>
+      <div id="faceAus" class="note"></div>
+    </div>
+  </section>
+  <section id="tab-layers" hidden>
+    <div class="note" data-t="layersNote"></div>
+    <h2 data-t="layersH"></h2>
+    <div class="row"><label><input type="checkbox" class="cbL" value="superficial" checked> <span data-t="L_superficial"></span></label></div>
+    <div class="row"><label><input type="checkbox" class="cbL" value="middle" checked> <span data-t="L_middle"></span></label></div>
+    <div class="row"><label><input type="checkbox" class="cbL" value="deep" checked> <span data-t="L_deep"></span></label></div>
+    <div class="row">
+      <button class="ctl" data-lay="all" data-t="layAll"></button>
+      <button class="ctl" data-lay="nosup" data-t="layNoSup"></button>
+      <button class="ctl" data-lay="deep" data-t="layDeep"></button>
+      <button class="ctl" data-lay="none" data-t="layNone"></button>
+    </div>
+    <div class="row"><label><input type="checkbox" id="cbGhost"> <span data-t="ghostLayers"></span></label></div>
+    <h2 data-t="bonesH"></h2>
+    <div class="row"><label><input type="checkbox" id="cbBone" checked> <span data-t="bones"></span></label></div>
+    <div class="note" id="boneHint"></div>
+    <h2 data-t="sideH"></h2>
+    <div class="row">
+      <label><input type="radio" name="side" value="both" checked> <span data-t="sideBoth"></span></label>
+      <label><input type="radio" name="side" value="l"> <span data-t="sideL"></span></label>
+      <label><input type="radio" name="side" value="r"> <span data-t="sideR"></span></label>
+    </div>
+  </section>
+</div>
+<div id="right" class="panel">
+  <div class="head"><span class="grow muted small" data-t="infoH"></span><button class="min" data-tt="min">–</button></div>
+  <div id="workbox" hidden>
+    <h1 data-t="workNow"></h1>
+    <div id="status" class="small"></div>
+    <div id="working" class="small"></div>
+  </div>
+  <div id="selbox" hidden>
+    <div><span class="muted small" data-t="selected"></span> <span id="selname"></span></div>
+    <div class="row">
+      <button class="ctl" id="bIso"></button>
+      <button class="ctl" id="bHide" data-t="bHide"></button>
+      <button class="ctl" id="bFocus" data-t="bFocus"></button>
+      <button class="ctl" id="bClear" data-t="bClear"></button>
+    </div>
+  </div>
+  <div id="card"></div>
+</div>
+<div id="viewbar">
+  <button data-view="front" data-t="vFront"></button>
+  <button data-view="back" data-t="vBack"></button>
+  <button data-view="left" data-t="vLeft"></button>
+  <button data-view="right" data-t="vRight"></button>
+  <button data-view="below" data-t="vBelow"></button>
+  <button data-view="home" data-t="vHome"></button>
+  <button data-view="head" data-t="vHead"></button>
+  <button id="bShot" data-t="bShot"></button>
+  <button id="bHelp" data-t="bHelp"></button>
+  <button id="bLang" data-tt="langTip"></button>
+  <button id="bShowAll" hidden></button>
+</div>
+<!-- 2026-11-16: the running exercise can be paused / ended from any tab -->
+<div id="motionbar" class="panel" hidden>
+  <button class="ctl" id="mbPlay"></button>
+  <span id="mbName" class="small"></span>
+  <button class="ctl" id="mbStop" data-t="exStop"></button>
+</div>
+<div id="hbar" data-tt="hbarTip">
+  <span class="hl" data-t="hTop"></span>
+  <div id="htrack"><div id="hthumb"></div></div>
+  <span class="hl" data-t="hBot"></span>
+</div>
+<div id="help" class="panel" hidden></div>
+<div id="tip"></div>
+<div id="foot"><span data-t="foot"></span> <span id="attr"></span></div>
+<script type="module" src="app.js?v=2026-11-18d"></script>
+</body>
+</html>
